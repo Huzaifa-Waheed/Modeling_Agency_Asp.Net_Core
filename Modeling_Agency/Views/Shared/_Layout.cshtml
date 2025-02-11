@@ -26,6 +26,7 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
+                    @Html.Partial("_LoginPartial")  <!-- This is partial view can also be written as <partial name="_LoginPartial" /> -->
                 </div>
             </div>
         </nav>
@@ -38,7 +39,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - Modeling_Agency - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Modeling_Agency
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
