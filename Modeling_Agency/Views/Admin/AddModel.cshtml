@@ -1,0 +1,96 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Add Model";
+}
+
+
+@model Model
+
+<h2>Add Model</h2>
+
+@using(Html.BeginForm("AddModel", "Admin", FormMethod.Post,new {enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.FirstName, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.FirstName, new { @class= "form-control", @placeholder = "First Name" })
+            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.LastName, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Phone, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Dob, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Dob, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(m => m.Dob, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Gender, new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.Gender, new SelectList(new[]{"male","female"}), "Select Gender", new {@class = "form-control"})
+            @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Category, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Category, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Location, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Location, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Location, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Rate, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Rate, new { @class = "form-control", type = "number", step = "0.01" })
+            @Html.ValidationMessageFor(m => m.Rate, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Weight, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Weight, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            @Html.LabelFor(m => m.Height, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Height, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(m => m.Height, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-12 mb-3">
+            @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 4 })
+            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label class="form-label">Model Image</label>
+            <input type="file" name="imageFile" class="form-control" />
+        </div>
+
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success">Add Model</button>
+            <a href="@Url.Action("ManageModels", "Admin")" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+}

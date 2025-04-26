@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewData["Title"] = "Model Requests";
+}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Requests</h3>
+        <div>Hi, Admin</div>
+    </div>
+
+    <!-- Requests Table -->
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Model</th>   <!-- Image + Name + Email -->
+                    <th>Gender</th>
+                    <th>Location</th>
+                    <th>Action</th>  <!-- Open Button -->
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mdl in Model)
+                {
+                    <tr>
+                        <!-- Image, Name, Email -->
+                        <td class="d-flex align-items-center">
+                            <img src="@mdl.ImgUrl" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                            <div>
+                                <div class="fw-bold">@mdl.FirstName @mdl.LastName</div>
+                                <div class="text-muted small">@mdl.Email</div>
+                            </div>
+                        </td>
+
+                        <!-- Gender -->
+                        <td>@mdl.Gender</td>
+
+                        <!-- Location -->
+                        <td>@mdl.Location</td>
+
+                        <!-- Open Button -->
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modelModal-@mdl.Id">
+                                Open
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modelModal-@mdl.Id" tabindex="-1" aria-labelledby="modelModalLabel-@mdl.Id" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modelModalLabel-@mdl.Id">@mdl.FirstName @mdl.LastName Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="text-center mb-3">
+                                        <img src="@mdl.ImgUrl" alt="Profile" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                                    </div>
+                                    <p><strong>Email:</strong> @mdl.Email</p>
+                                    <p><strong>Phone:</strong> @mdl.Phone</p>
+                                    <p><strong>Gender:</strong> @mdl.Gender</p>
+                                    <p><strong>Location:</strong> @mdl.Location</p>
+                                    <p><strong>Rate:</strong> @mdl.Rate</p>
+                                    <p><strong>Weight:</strong> @mdl.Weight</p>
+                                    <p><strong>Height:</strong> @mdl.Height</p>
+                                    <p><strong>Category:</strong> @mdl.Category</p>
+                                    <p><strong>Description:</strong> @mdl.Description</p>
+                                    <p><strong>Date of Birth:</strong> @(mdl.Dob?.ToString("yyyy-MM-dd"))</p>
+                                    <p><strong>Application Date:</strong> @(mdl.ApplicationDate?.ToString("yyyy-MM-dd"))</p>
+                                    <p><strong>Application Status:</strong> @mdl.ApplicationStatus</p>
+                                </div>
+
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <form asp-action="AcceptModel" asp-route-id="@mdl.Id" method="post">
+                                        <button type="submit" class="btn btn-success">Accept</button>
+                                    </form>
+                                    <form asp-action="RejectModel" asp-route-id="@mdl.Id" method="post">
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

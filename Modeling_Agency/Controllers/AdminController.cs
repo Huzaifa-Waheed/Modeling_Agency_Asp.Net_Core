@@ -178,6 +178,8 @@ namespace Modeling_Agency.Controllers
                 model.IsActive = true;
                 model.Availability = true;
 
+                modelAppli.ApplicationStatus = StatusSD.ACCEPT;
+
                 _context.Models.Add(model);
                 _context.SaveChanges();
 
@@ -188,7 +190,17 @@ namespace Modeling_Agency.Controllers
         [HttpPost]
         public IActionResult RejectModel(int id)
         {
+            var modelApplication = _context.ModelApplications.Where(ma => ma.Id == id).First();
+            if (modelApplication != null) {
+                modelApplication.ApplicationStatus = StatusSD.REJECT;
+                _context.SaveChanges();
+            }
             return RedirectToAction("ModelRequests");
+        }
+
+        public IActionResult Notifications()
+        {
+            return View();
         }
     }
 }

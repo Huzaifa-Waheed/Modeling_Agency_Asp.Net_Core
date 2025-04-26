@@ -1,0 +1,40 @@
+﻿
+@model List<HireRecord>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="container mt-5">
+   @*  <h2 class="mb-4 fw-bold">Notifications</h2> *@
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Requests</h3>
+        <div>Hi, Admin</div>
+    </div>
+
+    @foreach (var hire in Model)
+    {
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start">
+                <div>
+                    <p class="mb-1"><strong>Client:</strong> @hire.client.Email, @hire.client.Address</p>
+                    <p class="mb-1">@hire.client.Name request for @hire.model.FirstName @hire.model.LastName</p>
+                    <p class="mb-1"><strong>Description:</strong> @hire.Description</p>
+                    <p class="mb-1"><strong>Model:</strong> @hire.model.Email, @hire.model.Location</p>
+                </div>
+                <div class="text-end">
+                    <p class="mb-3"><strong>Date of Hiring:</strong> @(hire.RequestedDate?.ToString("yyyy-MM-dd"))</p>
+
+                    <form asp-action="AcceptHire" asp-route-id="@hire.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-success btn-sm me-2">Accept</button>
+                    </form>
+
+                    <form asp-action="RejectHire" asp-route-id="@hire.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>

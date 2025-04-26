@@ -1,0 +1,55 @@
+﻿
+@model List<Model>
+
+@{
+    ViewData["Title"] = "Manage Models";
+    var modelList = Model?.ToList();
+}
+
+<h2>Models</h2>
+
+<div class="mb-4">
+    <a class="btn btn-primary" asp-action="AddModel">Add Model</a>
+</div>
+
+<div class="row">
+    @if (modelList != null && modelList.Any())
+    {
+        @foreach (var modl in modelList)
+        {
+            <div class="col-md-3 mb-3">
+               <div class="card shadow-sm" style="width: 100%; max-width: 250px; margin: auto;">
+                    <img src="@modl.ImgUrl" class="card-img-top" alt="Model Image" style="height: 180px; object-fit: cover;">
+                    <div class="card-body text-center p-2">
+                        <h6 class="card-title mb-1">@modl.FirstName @modl.LastName</h6>
+                        <p class="card-text text-muted small mb-2">@modl.Category</p>
+                        <div class="d-flex justify-content-center">
+                             <a class="btn btn-sm btn-info me-2" asp-action="EditModel" asp-route-id="@modl.Id">Edit</a>
+                            <a class="btn btn-sm btn-danger" onclick="deleteModel(@modl.Id)">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-info">No models found.</div>
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script>
+        function deleteModel(id) {
+            if (confirm("Are you sure you want to delete this model?")) {
+                fetch(`/Admin/DeleteModel/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() }
+                }).then(() => window.location.reload());
+            }
+        }
+    </script>
+}
