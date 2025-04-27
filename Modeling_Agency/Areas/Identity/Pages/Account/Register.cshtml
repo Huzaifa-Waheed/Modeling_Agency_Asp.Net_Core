@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <select asp-for="Input.Role" class="form-control" aria-required="true">
+                        <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-control" aria-required="true">
                             <option value="" selected hidden>Select Role</option>
                         </select>
                         <label asp-for="Input.Role">Role</label>

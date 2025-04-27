@@ -14,18 +14,22 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Modeling_Agency.Models.DbModels;
+using Modeling_Agency.Utility;
 
 namespace Modeling_Agency.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -115,6 +119,25 @@ namespace Modeling_Agency.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    ApplicationUser user = await _userManager.FindByEmailAsync(Input.Email);
+
+                    HttpContext.Session.SetString("UserId", user.Id);
+                    HttpContext.Session.SetString("Name", user.Name);
+
+                    if(user.Role == RolesSD.ADMIN && returnUrl == "/")
+                    {
+                        return RedirectToAction("Dashboard", "Admin");
+                    }
+                    else if (user.Role == RolesSD.CLIENT && returnUrl == "/")
+                    {
+                        return RedirectToAction("Index", "Client");
+                    }
+                    else if (user.Role == RolesSD.MODEL && returnUrl == "/")
+                    {
+                        return RedirectToAction("ModelInfo", "Model", new { id = user.Id });
+                    }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
