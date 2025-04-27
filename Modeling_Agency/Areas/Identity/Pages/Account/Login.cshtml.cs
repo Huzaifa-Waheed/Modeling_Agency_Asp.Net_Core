@@ -131,7 +131,7 @@ namespace Modeling_Agency.Areas.Identity.Pages.Account
                     }
                     else if (user.Role == RolesSD.CLIENT && returnUrl == "/")
                     {
-                        return RedirectToAction("Index", "Client");
+                        return RedirectToAction("Explore", "Client");
                     }
                     else if (user.Role == RolesSD.MODEL && returnUrl == "/")
                     {

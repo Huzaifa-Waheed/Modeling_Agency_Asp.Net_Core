@@ -75,21 +75,21 @@
         .content {
             padding: 20px;
             height: 100vh;
-            overflow: hidden;
+            overflow: scroll;
         }
     </style>
 </head>
 <body>
     <!-- Side Navbar -->
     <nav class="sidebar">
-        <a href="/" class="navbar-brand mb-4 text-light">Modeling_Agency</a>
-        <ul class="nav flex-column">
-            <li class="nav-item">
+        <a href="/" class="navbar-brand mb-4 text-light">Cinex CS</a>
+        <ul class="nav flex-column justify-content-between">
+            @* <li class="nav-item">
                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </li>
+            </li> *@
             <li class="nav-item">
                 <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="ManageModels">Manage Models</a>
             </li>
@@ -100,6 +100,7 @@
                 <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Notifications">Notifications</a>
             </li>
         </ul>
+        @Html.Partial("_LoginPartial")  <!-- This is partial view can also be written as <partial name="_LoginPartial" /> -->
     </nav>
 
     <!-- Main Content -->

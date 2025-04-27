@@ -225,7 +225,7 @@ namespace Modeling_Agency.Controllers
             var hireRcrd = _context.HireRecords.Where(hr => hr.Id == id).FirstOrDefault();
             if (hireRcrd != null)
             {
-                hireRcrd.State = StatusSD.ACCEPT;
+                hireRcrd.State = StatusSD.REJECT;
                 hireRcrd.StateDate = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
