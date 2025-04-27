@@ -11,9 +11,18 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(option => 
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(
+builder.Services.AddIdentity<IdentityUser,IdentityRole>(
+    options =>
+    {
+        options.Password.RequiredLength = 6;
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.User.RequireUniqueEmail = true; // Check if email is unique
+    }
     //options => options.SignIn.RequireConfirmedAccount = true      // Check if email is confirmed before signing in but i commented it out
-    ).AddEntityFrameworkStores<ApplicationDbContext>();
+    ).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 var app = builder.Build();
 
