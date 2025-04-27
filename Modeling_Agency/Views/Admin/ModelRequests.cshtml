@@ -1,11 +1,12 @@
 ﻿
 @{
     ViewData["Title"] = "Model Requests";
+    Layout = "_AdminLayout";
 }
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3>Requests</h3>
-        <div>Hi, Admin</div>
+        <div>Hi, @Context.Session.GetString("Name")</div>
     </div>
 
     <!-- Requests Table -->
