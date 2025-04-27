@@ -1,0 +1,161 @@
+﻿/*.model-card {
+    transition: transform 0.3s ease;
+    border: none;
+}
+
+    .model-card:hover {
+        transform: scale(1.03);
+    }
+
+.card-img-overlay {
+    transition: opacity 0.3s ease;
+}
+
+.hover-opacity-100:hover {
+    opacity: 1 !important;
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+*/
+
+
+.model-card {
+    transition: transform 0.3s ease;
+    border: none;
+}
+
+    .model-card:hover {
+        transform: scale(1.03);
+    }
+
+.card-img-overlay {
+    transition: opacity 0.3s ease;
+}
+
+.hover-opacity-100:hover {
+    opacity: 1 !important;
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+/* Responsive height adjustments */
+@media (max-width: 768px) {
+    .model-card {
+        height: 350px !important;
+    }
+}
+
+/* Custom styling */
+.sticky-top {
+    z-index: 10;
+}
+
+.badge {
+    font-size: 0.85em;
+    padding: 0.35em 0.65em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .row.g-0 {
+        flex-direction: column-reverse;
+    }
+
+    .col-lg-6.bg-dark {
+        height: 50vh;
+    }
+
+    .col-lg-6.p-4 {
+        height: auto;
+    }
+
+    .sticky-top {
+        position: static !important;
+    }
+}
+
+
+/* Booking card styles */
+#bookingCard {
+    transition: all 0.3s ease;
+}
+
+#bookingBackdrop {
+    transition: opacity 0.3s ease;
+}
+
+.show-booking {
+    display: block !important;
+}
+
+
+:root {
+    --primary-color: #072d41;
+    --secondary-color: #f8f9fa;
+    --accent-color: #ff6b6b;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1521747116042-5a810fda9664');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.stats-section {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.model-card {
+    transition: transform 0.3s;
+    border: none;
+    overflow: hidden;
+}
+
+    .model-card:hover {
+        transform: translateY(-10px);
+    }
+
+.scroll-icon, .social-icons, .location {
+    position: fixed;
+    right: 30px;
+    z-index: 1000;
+}
+
+.scroll-icon {
+    bottom: 120px;
+}
+
+.social-icons {
+    bottom: 60px;
+}
+
+.location {
+    bottom: 20px;
+    color: white;
+    font-size: 0.9rem;
+}

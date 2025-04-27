@@ -1,0 +1,191 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Model
+
+<div class="container-fluid px-0">
+    <!-- Main Content Area -->
+    <div class="row g-0" style="min-height: calc(100vh - 120px);">
+        <!-- Adjust 120px based on your header/footer height -->
+        <!-- Left Side - Bio Data -->
+        <div class="col-lg-6 p-4 p-md-5 bg-light">
+            <div class="sticky-top pt-4" style="top: 80px;">
+                <!-- Sticky positioning -->
+                <h1 class="display-4 mb-4">@Model.FirstName @Model.LastName</h1>
+
+                <!-- Basic Info -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p class="mb-2"><strong>Category:</strong> @Model.Category</p>
+                        <p class="mb-2"><strong>Rate:</strong> $@Model.Rate/hour</p>
+                        <p class="mb-2">
+                            <strong>Availability:</strong>
+                            <span class="badge @(Model.Availability == true ? "bg-success" : "bg-secondary")">
+                                @(Model.Availability == true ? "Available" : "Not Available")
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-2"><strong>Age:</strong> @(DateTime.Now.Year - Model.Dob?.Year)</p>
+                        <p class="mb-2"><strong>Height:</strong> @Model.Height cm</p>
+                        <p class="mb-2"><strong>Weight:</strong> @Model.Weight kg</p>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Contact Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2"><i class="fas fa-envelope me-2"></i>E-Mail: @Model.Email</p>
+                        <p class="mb-2"><i class="fas fa-phone me-2"></i>Phone: @Model.Phone</p>
+                        <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Address: @Model.Location</p>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">About Me</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">@Model.Description</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2 d-md-flex">
+                    <button type="button" class="btn btn-primary me-md-2 px-4" data-bs-toggle="modal" data-bs-target="#bookingModal">
+                        <i class="fas fa-calendar-check me-2"></i>Book Now
+                    </button>
+                    <button class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-envelope me-2"></i>Message
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Image Gallery -->
+        <div class="col-lg-6 bg-dark">
+            <div class="h-100 d-flex align-items-center justify-content-center p-4">
+                <!-- Main Image -->
+                <div class="text-center">
+                    <img src="@Model.ImgUrl"
+                         class="img-fluid rounded-3 shadow-lg"
+                         alt="@Model.FirstName @Model.LastName"
+                         style="max-height: 80vh; width: auto;">
+                </div>
+
+                <!-- Image Thumbnails (if you have multiple images) -->
+                @* <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-75">
+                    <div class="d-flex overflow-auto">
+                        @foreach (var img in Model.ImageGallery) {
+                            <img src="@img" class="rounded me-2" width="80" height="80" style="object-fit: cover; cursor: pointer;">
+                        }
+                    </div>
+                </div> *@
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="bookingModalLabel">Book @Model.FirstName @Model.LastName</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <div class="mb-3">
+                        <label for="bookingDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="bookingDate" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="bookingHours" class="form-label">Hours</label>
+                        <input type="number" class="form-control" id="bookingHours" min="1" value="1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="bookingNotes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="bookingNotes" rows="3" placeholder="Why are you hiring this model?"></textarea>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="d-flex justify-content-between">
+                            <span>Rate:</span>
+                            <span>$@Model.Rate/hour</span>
+                        </div>
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>Total Amount:</span>
+                            <span id="totalAmount">$@Model.Rate</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="confirmBookingBtn" class="btn btn-success">Hire Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Calculate total amount when hours change
+            $('#bookingHours').on('input', function() {
+                const hours = $(this).val();
+                const rate = @Model.Rate;
+                const total = hours * rate;
+                $('#totalAmount').text('$' + total.toFixed(2));
+            });
+
+            // Confirm booking
+            $('#confirmBookingBtn').click(function() {
+                if ($('#bookingForm')[0].checkValidity()) {
+                    const hireRecord = {
+                        ModelId: @Model.Id,
+                        RequestedDate: $('#bookingDate').val(),
+                        Description: $('#bookingNotes').val(),
+                        Amount: parseFloat($('#totalAmount').text().substring(1))
+                    };
+
+                    // AJAX call to submit booking
+                    $.ajax({
+                        url: '/Client/CreateBooking',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(hireRecord),
+                        success: function(response) {
+                            $('#bookingModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Booking Confirmed!',
+                                text: response.message,
+                                confirmButtonText: 'OK'
+                            });
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Booking Failed',
+                                text: xhr.responseText || 'An error occurred while processing your booking.',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                } else {
+                    $('#bookingForm')[0].reportValidity();
+                }
+            });
+        });
+    </script>
+}

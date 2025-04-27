@@ -1,0 +1,125 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model ModelVM
+
+<div class="container-fluid py-4">
+    <!-- Model Information Section -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">@Model.model.FirstName @Model.model.LastName's Profile</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <img src="@Model.model.ImgUrl" class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="Model Image">
+                    <div class="mt-3">
+                        <span class="badge @(Model.model.Availability == true ? "bg-success" : "bg-secondary") fs-6">
+                            @(Model.model.Availability == true ? "Available" : "Not Available")
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Category:</strong> @Model.model.Category</p>
+                            <p><strong>Rate:</strong> $@Model.model.Rate/hour</p>
+                            <p><strong>Age:</strong> @(DateTime.Now.Year - Model.model.Dob?.Year)</p>
+                            <p><strong>Height:</strong> @Model.model.Height cm</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Weight:</strong> @Model.model.Weight kg</p>
+                            <p><strong>Location:</strong> @Model.model.Location</p>
+                            <p><strong>Email:</strong> @Model.model.Email</p>
+                            <p><strong>Phone:</strong> @Model.model.Phone</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h5>About</h5>
+                        <p>@Model.model.Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hire Records and Messages Section -->
+    <div class="row g-4">
+        <!-- Hire Records (70%) -->
+        <div class="col-lg-8">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Hire Records</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var hire in Model.hireRecords)
+                                {
+                                    <tr>
+                                        <td>@hire.RequestedDate?.ToString("d")</td>
+                                        <td>$@hire.Amount</td>
+                                        <td>
+                                            <span class="badge @GetStatusBadgeClass(hire.State)">
+                                                @hire.State
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages (30%) -->
+        <div class="col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Messages</h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @foreach (var message in Model.messages)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1">@message.Title</h6>
+                                    <small>@message.CreatedDate?.ToString("g")</small>
+                                </div>
+                                <p class="mb-1">@message.Message</p>
+                                <small>From: @message.client.UserName</small>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Pending" => "bg-warning",
+            "Approved" => "bg-success",
+            "Rejected" => "bg-danger",
+            "Completed" => "bg-info",
+            _ => "bg-secondary"
+        };
+    }
+}

@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Modeling_Agency.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href= "~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     <header>
@@ -14,7 +17,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">Modeling_Agency</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -25,6 +28,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item" id="notifications-button" style="cursor: pointer;">
+                            <a class="nav-link text-light">Notifications</a>
+                        </li>
+                        @if (User.IsInRole(RolesSD.CLIENT))
+                        {
+                            <li class="nav-item" id="notifications-button">
+                                Notifications
+                            </li>
+                        }
                     </ul>
                     @Html.Partial("_LoginPartial")  <!-- This is partial view can also be written as <partial name="_LoginPartial" /> -->
                 </div>
@@ -34,17 +46,139 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+
+            <!-- Notifications Modal -->
+            <div class="modal fade" id="notificationsModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Notifications</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="nav nav-tabs mb-3" id="notificationsTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="accepted-tab" data-bs-toggle="tab" data-bs-target="#accepted-notifications" type="button" role="tab">Accepted</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected-notifications" type="button" role="tab">Rejected</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending-notifications" type="button" role="tab">Pending</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="notificationsTabContent">
+                                <div class="tab-pane fade show active" id="accepted-notifications" role="tabpanel">
+                                    <!-- Accepted notifications content -->
+                                </div>
+                                <div class="tab-pane fade" id="rejected-notifications" role="tabpanel">
+                                    <!-- Rejected notifications content -->
+                                </div>
+                                <div class="tab-pane fade" id="pending-notifications" role="tabpanel">
+                                    <!-- Pending notifications content -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    @* <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - Modeling_Agency
         </div>
+    </footer> *@
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <img src="Pics/logo.png" alt="Cinexcs Logo" height="50" class="mb-3">
+                    <p>Pakistan's leading talent network since 2011, discovering and nurturing exceptional models across the country.</p>
+                </div>
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="#models" class="text-white text-decoration-none">Models</a></li>
+                        <li class="mb-2"><a href="#services" class="text-white text-decoration-none">Services</a></li>
+                        <li class="mb-2"><a href="#about" class="text-white text-decoration-none">About</a></li>
+                        <li><a href="#contact" class="text-white text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5 class="mb-3">Contact Info</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> UET KSK, Lahore</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +92 300 1234567</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@cinexcs.com</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="https://www.instagram.com/cinexcs.official/" class="text-white fs-4" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com" class="text-white fs-4" target="_blank"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.whatsapp.com" class="text-white fs-4" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.linkedin.com" class="text-white fs-4" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 Cinexcs Modeling Agency. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
+
+    <!-- Scroll Icons -->
+    <div class="scroll-icon d-flex flex-column">
+        <a href="#" id="scroll-up" class="text-white mb-2">
+            <i class="fas fa-angle-up fs-4"></i>
+        </a>
+        <a href="#" id="scroll-down" class="text-white">
+            <i class="fas fa-angle-down fs-4"></i>
+        </a>
+    </div>
+
+    <!-- Social Icons -->
+    <div class="social-icons d-flex flex-column">
+        <a href="https://www.instagram.com/cinexcs.official/" class="text-white mb-3" target="_blank">
+            <i class="fab fa-instagram fs-4"></i>
+        </a>
+        <a href="https://www.facebook.com" class="text-white mb-3" target="_blank">
+            <i class="fab fa-facebook fs-4"></i>
+        </a>
+        <a href="https://www.whatsapp.com" class="text-white" target="_blank">
+            <i class="fab fa-whatsapp fs-4"></i>
+        </a>
+    </div>
+
+    <!-- Location -->
+    <div class="location d-flex align-items-center">
+        <i class="fas fa-globe me-2"></i>
+        <span>Pakistan</span>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        // Simple scroll functionality
+        document.getElementById('scroll-up').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.getElementById('scroll-down').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

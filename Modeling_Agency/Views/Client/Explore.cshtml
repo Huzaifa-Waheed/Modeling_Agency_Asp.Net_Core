@@ -1,0 +1,93 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<Model>  // Replace with your actual model type
+
+<div class="container-fluid p-0">
+    <!-- Search and Category Filters -->
+    <div class="row justify-content-between align-items-center py-3 px-4 bg-dark">
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="input-group">
+                <input type="text" id="searchInput" class="form-control rounded-pill" placeholder="Search models...">
+                <span class="input-group-text bg-transparent border-0 position-absolute end-0 top-50 translate-middle-y">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-md-end gap-3 p-2 bg-dark bg-opacity-10 rounded-pill">
+                <a href="#" class="text-white text-decoration-none category-link active" data-category="all">ALL</a>
+                <a href="#" class="text-white text-decoration-none category-link" data-category="male">MALE</a>
+                <a href="#" class="text-white text-decoration-none category-link" data-category="female">FEMALE</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Gallery -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4 px-4 py-3" id="model-gallery">
+        @foreach (var modl in Model)
+        {
+            <div class="col">
+                <a href="@Url.Action("DetailsPage", "Client", new { id = modl.Id })"
+                   class="card model-card overflow-hidden text-decoration-none d-flex flex-column"
+                   data-category="@modl.Category.ToLower()"
+                   style="height: 400px;">
+                    <!-- Increased height to 400px -->
+                    <div class="flex-grow-1 overflow-hidden">
+                        <!-- Container for image that will grow -->
+                        <img src="@modl.ImgUrl"
+                             class="card-img-top w-100 h-100 object-fit-cover"
+                             alt="@modl.FirstName">
+                    </div>
+                    <div class="card-img-overlay d-flex flex-column justify-content-center bg-dark bg-opacity-75 text-white opacity-0 hover-opacity-100 transition-all">
+                        <h5 class="card-title">@modl.FirstName @modl.LastName</h5>
+                        <p class="card-text model-gender">@modl.Gender.ToUpper()</p>
+                        <p class="card-text">Height: @modl.Height | Age: @(DateTime.Now.Year - modl.Dob?.Year) years</p>
+                        <p class="card-text">@modl.Category</p>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+   
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            
+
+            // Category filter
+            $('.category-link').click(function(e) {
+                e.preventDefault();
+                $('.category-link').removeClass('active');
+                $(this).addClass('active');
+                
+                const category = $(this).data('category');
+                if (category === 'all') {
+                    $('.model-card').parent().show();
+                } else {
+                    $('.model-card').each(function() {
+                        $(this).parent().toggle($(this).data('category') === category);
+                    });
+                }
+            });
+
+            // Search functionality
+            $('#searchInput').on('input', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                $('.model-card').each(function() {
+                    const modelName = $(this).find('.card-title').text().toLowerCase();
+                    $(this).parent().toggle(modelName.includes(searchTerm));
+                });
+            });
+        });
+    </script>
+
+}
