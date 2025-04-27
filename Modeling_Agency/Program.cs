@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Modeling_Agency.Data;
 using Microsoft.AspNetCore.Identity;
+using Modeling_Agency.Utility;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Modeling_Agency.Models.DbModels;
+using Modeling_Agency.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +15,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(option => 
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<IdentityUser,IdentityRole>(
+builder.Services.AddIdentity<ApplicationUser,IdentityRole>(
     options =>
     {
         options.Password.RequiredLength = 6;
@@ -23,6 +27,18 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>(
     }
     //options => options.SignIn.RequireConfirmedAccount = true      // Check if email is confirmed before signing in but i commented it out
     ).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+
+builder.Services.AddSession(opt =>
+{
+    opt.Cookie.HttpOnly = true;
+    opt.Cookie.IsEssential = true;
+    opt.IdleTimeout = TimeSpan.FromMinutes(15);
+});
+
+builder.Services.AddScoped<AuthenticationFilter>();
+
+builder.Services.AddScoped<IEmailSender,EmailSender>();
 
 var app = builder.Build();
 
