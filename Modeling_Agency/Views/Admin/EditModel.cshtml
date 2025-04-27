@@ -9,12 +9,12 @@
 
 <form asp-action="EditModel" method="post" enctype="multipart/form-data">
     <div class="row">
-        <input type="hidden" name="@Model.Id" />
-        <input type="hidden" name="@Model.ImgUrl" />
-        <input type="hidden" name="@Model.IsActive" />
-        <input type="hidden" name="@Model.Availability" />
-        <input type="hidden" name="@Model.CreatedBy" />
-        <input type="hidden" name="@Model.CreatedOn" />
+        <input type="hidden" name="Id" />
+        <input type="hidden" name="ImgUrl" />
+        <input type="hidden" name="IsActive" />
+        <input type="hidden" name="Availability" />
+        <input type="hidden" name="CreatedBy" />
+        <input type="hidden" name="CreatedOn" />
         <div class="col-md-6 mb-3">
             <label asp-for="FirstName" class="form-label"></label>
             <input asp-for="FirstName" class="form-control" />
