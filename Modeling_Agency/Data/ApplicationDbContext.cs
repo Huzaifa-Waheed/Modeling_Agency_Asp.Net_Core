@@ -15,6 +15,7 @@ namespace Modeling_Agency.Data
         public DbSet<Model> Models { get; set; }
         public DbSet<HireRecord> HireRecords { set; get; }
         public DbSet<ModelApplication> ModelApplications { set; get; }
+        public DbSet<Messages> messages { set; get; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

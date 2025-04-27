@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Modeling_Agency.Data;
+using Modeling_Agency.Filters;
 using Modeling_Agency.Models.DbModels;
 using Modeling_Agency.Utility;
 
 namespace Modeling_Agency.Controllers
 {
+    [ServiceFilter(typeof(AuthenticationFilter))]
+    [TypeFilter(typeof(RoleAuthorizationFilter), Arguments = new object[] { RolesSD.ADMIN })]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -200,7 +203,33 @@ namespace Modeling_Agency.Controllers
 
         public IActionResult Notifications()
         {
-            return View();
+            var hireRecords = _context.HireRecords.Where(hr => hr.IsActive == true && hr.State == StatusSD.PENDING)
+                                                            .Include(hr => hr.client).Include(hr => hr.model).ToList();
+            return View(hireRecords);
+        }
+
+        public IActionResult AcceptHire(int id)
+        {
+            var hireRcrd = _context.HireRecords.Where(hr => hr.Id == id).FirstOrDefault();
+            if(hireRcrd != null)
+            {
+                hireRcrd.State = StatusSD.ACCEPT;
+                hireRcrd.StateDate = DateTime.Now;
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Notifications");
+        }
+
+        public async Task<IActionResult> RejectHire(int id)
+        {
+            var hireRcrd = _context.HireRecords.Where(hr => hr.Id == id).FirstOrDefault();
+            if (hireRcrd != null)
+            {
+                hireRcrd.State = StatusSD.ACCEPT;
+                hireRcrd.StateDate = DateTime.Now;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Notifications");
         }
     }
 }
